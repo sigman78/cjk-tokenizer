@@ -7,15 +7,14 @@ all: build
 build: cjk-tokenizer.o libcjk-tokenizer.a
 
 cjk-tokenizer.o:
-	$(CPP) $(CFLAGS) -c cjk-tokenizer.cc
+	$(CPP) $(CPP_FLAGS) -c cjk-tokenizer.cc
 
 libcjk-tokenizer.a: cjk-tokenizer.o
 	ar crv $@ cjk-tokenizer.o
 	ranlib $@
 
 test:
-	$(CPP) $(CFLAGS) $(INC) $(LIB) $(DEFINES) -o $@ $@.cc \
-	-L. -lcjk-tokenizer -lunicode
+	$(CPP) $(CPP_FLAGS) -o $@ $@.cc -L. -lcjk-tokenizer -lunicode
 	./$@
 
 clean:
