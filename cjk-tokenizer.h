@@ -17,6 +17,7 @@ namespace cjk {
         static inline void _convert_unicode_to_char(unicode_char_t &uchar,
                                                     unsigned char *p);
         public:
+        unsigned int max_token_count;
         tokenizer();
         tokenizer(enum tokenizer_type type);
         ~tokenizer();

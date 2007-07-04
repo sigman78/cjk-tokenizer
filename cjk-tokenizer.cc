@@ -62,11 +62,13 @@
 using namespace std;
 using namespace cjk;
 
-tokenizer::tokenizer() {
+tokenizer::tokenizer() : _type(TOKENIZER_DEFAULT),
+                         max_token_count(0) {
     unicode_init();
 }
 
-tokenizer::tokenizer(enum tokenizer_type type) : _type(type) {
+tokenizer::tokenizer(enum tokenizer_type type) : _type(type),
+                                                 max_token_count(0) {
     unicode_init();
 }
 
@@ -109,13 +111,20 @@ void tokenizer::tokenize(string &str, vector<string> &token_list) {
     vector<string> temp_token_list;
 
     this->split(str, temp_token_list);
-
     for (unsigned int i = 0; i < temp_token_list.size();) {
+        if (this->max_token_count > 0
+            && token_list.size() >= this->max_token_count) {
+            break;
+        }
         token_str.clear();
         if (UTF8_IS_CJK((unsigned char*) temp_token_list[i].c_str())) {
             token_list.push_back(temp_token_list[i]);
             if (this->_type != TOKENIZER_UNIGRAM
                 && i + 1 < temp_token_list.size()) {
+                if (this->max_token_count > 0
+                    && token_list.size() >= this->max_token_count) {
+                    break;
+                }
                 unsigned char *p
                     = (unsigned char*) temp_token_list[i+1].c_str();
                 if (UTF8_IS_CJK(p)) {
@@ -138,7 +147,13 @@ void tokenizer::tokenize(string &str, vector<string> &token_list) {
                 j++;
             }
             i = j;
-            token_list.push_back(token_str);
+            if (this->max_token_count > 0
+                && token_list.size() >= this->max_token_count) {
+                break;
+            }
+            if(token_str.length() > 0) {
+                token_list.push_back(token_str);
+            }
         }
     }
 }
