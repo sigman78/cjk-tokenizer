@@ -24,6 +24,18 @@ int main() {
     cout << endl << endl;
 
     token_list.clear();
+    tknzr.max_token_count = 10;
+    cout << "Max token count: " << tknzr.max_token_count << endl;
+    tknzr.tokenize(text_str, token_list);
+    cout << "Original string: " << text << endl;
+    cout << "Tokenized result: ";
+    for (token_iter = token_list.begin();
+         token_iter != token_list.end(); token_iter++) {
+        cout << "[" << *token_iter << "] ";
+    }
+    cout << endl << endl;
+
+    token_list.clear();
     tknzr2.tokenize(text_str, token_list);
     cout << "Original string: " << text << endl;
     cout << "Tokenized result: ";
