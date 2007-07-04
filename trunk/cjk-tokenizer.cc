@@ -62,13 +62,8 @@
 using namespace std;
 using namespace cjk;
 
-tokenizer::tokenizer() : _type(TOKENIZER_DEFAULT),
+tokenizer::tokenizer() : ngram_size(2),
                          max_token_count(0) {
-    unicode_init();
-}
-
-tokenizer::tokenizer(enum tokenizer_type type) : _type(type),
-                                                 max_token_count(0) {
     unicode_init();
 }
 
@@ -93,9 +88,9 @@ void tokenizer::_convert_unicode_to_char(unicode_char_t &uchar,
     }
     else if (uchar < 0x200000) {
         p[0] = (0xF0 | uchar >> 18);
-        p[0] = (0x80 | uchar >> 12 & 0x3F);
-        p[0] = (0x80 | uchar >> 6 & 0x3F);
-        p[0] = (0x80 | uchar & 0x3F);
+        p[1] = (0x80 | uchar >> 12 & 0x3F);
+        p[2] = (0x80 | uchar >> 6 & 0x3F);
+        p[3] = (0x80 | uchar & 0x3F);
     }
 }
 
@@ -118,18 +113,14 @@ void tokenizer::tokenize(string &str, vector<string> &token_list) {
         }
         token_str.clear();
         if (UTF8_IS_CJK((unsigned char*) temp_token_list[i].c_str())) {
-            token_list.push_back(temp_token_list[i]);
-            if (this->_type != TOKENIZER_UNIGRAM
-                && i + 1 < temp_token_list.size()) {
-                if (this->max_token_count > 0
-                    && token_list.size() >= this->max_token_count) {
+            for (unsigned int j = i; j < i + this->ngram_size; j++) {
+                if (j == temp_token_list.size()) {
                     break;
                 }
-                unsigned char *p
-                    = (unsigned char*) temp_token_list[i+1].c_str();
-                if (UTF8_IS_CJK(p)) {
-                    token_list.push_back(temp_token_list[i]
-                                         + temp_token_list[i+1]);
+                if (UTF8_IS_CJK((unsigned char*)
+                                temp_token_list[j].c_str())) {
+                    token_str += temp_token_list[j];
+                    token_list.push_back(token_str);
                 }
             }
             i++;
@@ -178,5 +169,26 @@ void tokenizer::split(string &str, vector<string> &token_list) {
         }
         _convert_unicode_to_char(uchar, p);
         token_list.push_back(string((const char*) p));
+    }
+}
+
+void tokenizer::split(char *buf, size_t buf_len, 
+                      vector<unicode_char_t> &token_list) {
+    assert(buf != NULL);
+    string str = string(buf, buf_len);
+    this->split(str, token_list);
+}
+
+void tokenizer::split(string &str, vector<unicode_char_t> &token_list) {
+    unicode_char_t uchar;
+    char *str_ptr = (char*) str.c_str();
+    int str_utf8_len = unicode_strlen(str_ptr, str.length());
+
+    for (int i = 0; i < str_utf8_len; i++) {
+        str_ptr = unicode_get_utf8((const char*) str_ptr, &uchar);
+        if (str_ptr == NULL) {
+            break;
+        }
+        token_list.push_back(uchar);
     }
 }

@@ -13,13 +13,12 @@ namespace cjk {
     
     class tokenizer {
         private:
-        enum tokenizer_type _type;
         static inline void _convert_unicode_to_char(unicode_char_t &uchar,
                                                     unsigned char *p);
         public:
+        unsigned int ngram_size;
         unsigned int max_token_count;
         tokenizer();
-        tokenizer(enum tokenizer_type type);
         ~tokenizer();
         void tokenize(std::string &str,
                       std::vector<std::string> &token_list);
@@ -29,6 +28,10 @@ namespace cjk {
                    std::vector<std::string> &token_list);
         void split(char *buf, size_t buf_len,
                    std::vector<std::string> &token_list);
+        void split(std::string &str,
+                   std::vector<unicode_char_t> &token_list);
+        void split(char *buf, size_t buf_len,
+                   std::vector<unicode_char_t> &token_list);
     };
 };
 
