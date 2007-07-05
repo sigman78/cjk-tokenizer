@@ -6,11 +6,6 @@
 #include <unicode.h>
 
 namespace cjk {
-    enum tokenizer_type {
-        TOKENIZER_DEFAULT,
-        TOKENIZER_UNIGRAM
-    };
-    
     class tokenizer {
         private:
         static inline void _convert_unicode_to_char(unicode_char_t &uchar,
