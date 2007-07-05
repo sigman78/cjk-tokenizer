@@ -15,7 +15,6 @@ int main() {
 
     cout << "[Default]" << endl;
     token_list.clear();
-    tknzr.ngram_size = 1;
     cout << "Ngram size: "  << tknzr.ngram_size << endl;
     tknzr.tokenize(text_str, token_list);
     cout << "Original string: " << text << endl;
