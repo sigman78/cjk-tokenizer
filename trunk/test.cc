@@ -10,6 +10,9 @@ int main() {
     vector<string>::iterator token_iter;
     char text[] =
         "美女遊戲等你挑戰周蕙最新鈴搶先下載茄子醬耍可愛一流"
+        "납치 여중생 공포에 떠는데'…경찰 200m 거리 25분만에 출동"
+        "寛永通宝の一。京都方広寺の大仏をこわして1668年（寛文8）から鋳造した銅銭。"
+        "ㄅㄆㄇㄈㄉㄊㄋㄌㄧㄨㄩ"
         "Giant Microwave Turns Plastic Back to Oil";
     string text_str = string(text);
 
@@ -101,5 +104,20 @@ int main() {
     }
     cout << endl << endl;
 
+    string cjk_str = "這是CJK字串";
+    string pure_cjk_str =
+        "這個字串只含中日韓。"
+        "コンピューターの機能を、音響・映像・作品制御などに利用する芸術の総称。"
+        "납치 여중생 공포에 떠는데'…경찰 200m 거리 25분만에 출동"
+        "ㄅㄆㄇㄈㄉㄊㄋㄌㄧㄨㄩ";
+    cout << "[" << cjk_str << "]" << " has CJK characters? "
+         << tknzr.has_cjk(cjk_str) << endl;
+    cout << "[" << cjk_str << "]" << " has CJK characters only? "
+         << tknzr.has_cjk_only(cjk_str) << endl;
+    cout << "[" << pure_cjk_str << "]" << " has CJK characters? "
+         << tknzr.has_cjk(pure_cjk_str) << endl;
+    cout << "[" << pure_cjk_str << "]" << " has CJK characters only? "
+         << tknzr.has_cjk_only(pure_cjk_str) << endl;
+    cout << endl;
     return 0;
 }
