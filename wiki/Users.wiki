@@ -1,5 +1,3 @@
-#summary Users
-
 == Please leave your name below if you are using cjk-tokenizer and find it helpful ==
 
   Yung-chung Lin (Of course)
