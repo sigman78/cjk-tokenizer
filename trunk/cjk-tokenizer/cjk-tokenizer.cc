@@ -109,6 +109,10 @@ void tokenizer::tokenize(const string &str, vector<string> &token_list) {
         token_str.clear();
         if (UTF8_IS_CJK(temp_uchar_list[i])) {
             for (unsigned int j = i; j < i + this->ngram_size; j++) {
+                if (this->max_token_count > 0
+                    && token_list.size() >= this->max_token_count) {
+                    break;
+                }
                 if (j == temp_token_list.size()) {
                     break;
                 }
