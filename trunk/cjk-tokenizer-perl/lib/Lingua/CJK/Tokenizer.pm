@@ -12,7 +12,7 @@ __END__
 
 =head1 NAME
 
-Locale::Memories - L10N Message Retrieval
+Lingua::CJK::Tokenizer - CJK Tokenizer
 
 =head1 SYNOPSIS
 
