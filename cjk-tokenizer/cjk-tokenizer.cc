@@ -86,13 +86,6 @@ unsigned char* tokenizer::_unicode_to_char(unicode_char_t &uchar,
     return p;
 }
 
-void tokenizer::tokenize(const char *buf, size_t buf_len,
-                         vector<string> &token_list) {
-    assert(buf != NULL);
-    string str = string(buf, buf_len);
-    this->tokenize(str, token_list);
-}
-
 void tokenizer::tokenize(const string &str, vector<string> &token_list) {
     string token_str;
     vector<string> temp_token_list;
@@ -147,13 +140,6 @@ void tokenizer::tokenize(const string &str, vector<string> &token_list) {
     }
 }
 
-void tokenizer::split(const char *buf, size_t buf_len, 
-                      vector<string> &token_list) {
-    assert(buf != NULL);
-    string str = string(buf, buf_len);
-    this->split(str, token_list);
-}
-
 void tokenizer::split(const string &str, vector<string> &token_list) {
     unicode_char_t uchar;
     char *str_ptr = (char*) str.c_str();
@@ -168,13 +154,6 @@ void tokenizer::split(const string &str, vector<string> &token_list) {
 
         token_list.push_back(string((const char*)_unicode_to_char(uchar, p)));
     }
-}
-
-void tokenizer::split(const char *buf, size_t buf_len, 
-                      vector<unicode_char_t> &token_list) {
-    assert(buf != NULL);
-    string str = string(buf, buf_len);
-    this->split(str, token_list);
 }
 
 void tokenizer::split(const string &str, vector<unicode_char_t> &token_list) {
@@ -204,12 +183,6 @@ bool tokenizer::has_cjk(const std::string &str) {
     return false;
 }
 
-bool tokenizer::has_cjk(const char *buf, size_t buf_len) {
-    assert(buf != NULL);
-    string str = string(buf, buf_len);
-    return this->has_cjk(str);
-}
-
 bool tokenizer::has_cjk_only(const std::string &str) {
     vector<unicode_char_t> temp_uchar_list;
 
@@ -223,8 +196,3 @@ bool tokenizer::has_cjk_only(const std::string &str) {
     return true;
 }
 
-bool tokenizer::has_cjk_only(const char *buf, size_t buf_len) {
-    assert(buf != NULL);
-    string str = string(buf, buf_len);
-    return this->has_cjk_only(str);
-}
