@@ -104,6 +104,17 @@ int main() {
     }
     cout << endl << endl;
 
+    cout << "-- CJK Segmentation" << endl;
+    cout << "Original string: " << text << endl;
+    token_list.clear();
+    tknzr.segment(text_str, token_list);
+    cout << "Tokenized result: ";
+    for (token_iter = token_list.begin();
+         token_iter != token_list.end(); token_iter++) {
+        cout << "[" << *token_iter << "] ";
+    }
+    cout << endl << endl;
+    
     string cjk_str = "這是CJK字串";
     string pure_cjk_str =
         "這個字串只含中日韓。"
