@@ -17,20 +17,12 @@ namespace cjk {
         ~tokenizer();
         void tokenize(const std::string &str,
                       std::vector<std::string> &token_list);
-        void tokenize(const char *buf, size_t buf_len,
-                      std::vector<std::string> &token_list);
         void split(const std::string &str,
                    std::vector<std::string> &token_list);
-        void split(const char *buf, size_t buf_len,
-                   std::vector<std::string> &token_list);
         void split(const std::string &str,
-                   std::vector<unicode_char_t> &token_list);
-        void split(const char *buf, size_t buf_len,
                    std::vector<unicode_char_t> &token_list);
         bool has_cjk(const std::string &str);
-        bool has_cjk(const char *buf, size_t buf_len);
         bool has_cjk_only(const std::string &str);
-        bool has_cjk_only(const char *buf, size_t buf_len);
     };
 };
 

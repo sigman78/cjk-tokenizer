@@ -43,8 +43,8 @@ tokenizer::tokenize(SV* str)
         }
         vector<string> token_list;
         vector<string>::iterator token_iter;
-        THIS->tokenize((const char*) SvPV(str, SvCUR(str)), SvCUR(str),
-                       token_list);
+        string s((const char*) SvPV(str, SvCUR(str)));
+        THIS->tokenize(s, token_list);
 
         AV* tokens = newAV();
         for (token_iter = token_list.begin(); token_iter != token_list.end();
@@ -66,8 +66,8 @@ tokenizer::split(SV* str)
         }
         vector<string> token_list;
         vector<string>::iterator token_iter;
-        THIS->split((const char*) SvPV(str, SvCUR(str)), SvCUR(str),
-                    token_list);
+        string s((const char*) SvPV(str, SvCUR(str)));
+        THIS->split(s, token_list);
 
         AV* tokens = newAV();
         for (token_iter = token_list.begin(); token_iter != token_list.end();
@@ -87,8 +87,8 @@ tokenizer::has_cjk(SV* str)
 	    Perl_croak(aTHX_ "The input must be a UTF-8 string");
             XSRETURN_UNDEF;
         }
-        RETVAL = THIS->has_cjk((const char*) SvPV(str, SvCUR(str)),
-                               SvCUR(str));
+        string s((const char*) SvPV(str, SvCUR(str)));
+        RETVAL = THIS->has_cjk(s);
     OUTPUT:
         RETVAL
 
@@ -100,8 +100,9 @@ tokenizer::has_cjk_only(SV* str)
 	    Perl_croak(aTHX_ "The input must be a UTF-8 string");
             XSRETURN_UNDEF;
         }
-        RETVAL = THIS->has_cjk_only((const char*) SvPV(str, SvCUR(str)),
-                                    SvCUR(str));
+        string s((const char*) SvPV(str, SvCUR(str)));
+        RETVAL = THIS->has_cjk_only(s);
+
     OUTPUT:
         RETVAL
 
