@@ -79,6 +79,29 @@ tokenizer::split(SV* str)
     OUTPUT:
         RETVAL
 
+SV*
+tokenizer::segment(SV* str)
+    CODE:
+        if (!SvPOK(str)
+            || !is_utf8_string((U8*)SvPV(str, SvCUR(str)), SvCUR(str))) {
+	    Perl_croak(aTHX_ "The input must be a UTF-8 string");
+            XSRETURN_UNDEF;
+        }
+        vector<string> token_list;
+        vector<string>::iterator token_iter;
+        string s((const char*) SvPV(str, SvCUR(str)));
+        THIS->segment(s, token_list);
+
+        AV* tokens = newAV();
+        for (token_iter = token_list.begin(); token_iter != token_list.end();
+             token_iter++) {
+            av_push(tokens, newSVpv(token_iter->c_str(),
+                                    (STRLEN) token_iter->length()));
+        }
+        RETVAL = newRV_noinc((SV*) tokens);
+    OUTPUT:
+        RETVAL
+
 bool
 tokenizer::has_cjk(SV* str)
     CODE:

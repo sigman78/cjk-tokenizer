@@ -52,6 +52,23 @@
 using namespace std;
 using namespace cjk;
 
+static void _split_string(string str, const string &delim,
+                          vector<string> &list) {
+    list.clear();
+
+    string::size_type cut_at = 0;
+    while ((cut_at = str.find_first_of(delim)) != str.npos) {
+        if(cut_at > 0) {
+            list.push_back(str.substr(0,cut_at));
+        }
+        str = str.substr(cut_at+1);
+    }
+    if(str.length() > 0)
+    {
+        list.push_back(str);
+    }
+}
+
 tokenizer::tokenizer() : ngram_size(2),
                          max_token_count(0) {
     unicode_init();
@@ -168,6 +185,17 @@ void tokenizer::split(const string &str, vector<unicode_char_t> &token_list) {
         }
         token_list.push_back(uchar);
     }
+}
+
+void tokenizer::segment(string str, vector<string> &token_segment) {
+    vector<string> token_list;
+    for (string::iterator it = str.begin(); it != str.end(); ++it) {
+        if (*it == '\n' || *it == '\r' || *it == '\t') {
+            *it = ' ';
+        }
+    }
+
+    _split_string(str, " ", token_segment);
 }
 
 bool tokenizer::has_cjk(const std::string &str) {

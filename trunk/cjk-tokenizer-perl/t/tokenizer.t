@@ -1,4 +1,4 @@
-use Test::More tests => 6;
+use Test::More tests => 8;
 use strict;
 use Lingua::CJK::Tokenizer;
 
@@ -26,6 +26,10 @@ is(scalar(@$tokens_ref), 5);
 
 $tokens_ref = $tknzr->split($text_str);
 is(scalar(@$tokens_ref), 151);
+
+$tokens_ref = $tknzr->segment($text_str);
+is($tokens_ref->[0], '美女遊戲等你挑戰周蕙最新鈴搶先下載茄子醬耍可愛一流납치');
+is(scalar(@$tokens_ref), 14);
 
 ok($tknzr->has_cjk($text_str));
 ok(!$tknzr->has_cjk_only($text_str));
