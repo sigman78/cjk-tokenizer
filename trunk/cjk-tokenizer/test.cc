@@ -4,6 +4,14 @@
 using namespace std;
 using namespace cjk;
 
+class handler : public tokenizer_handler {
+public:
+    void handle_token(const std::string &tok, bool is_cjk) {
+        cout << "Handling [" << tok << "] by handler class. "
+             << "(CJK: " << is_cjk << ")" << endl;
+    };
+};
+
 int main() {
     tokenizer tknzr;
     vector<string> token_list;
@@ -113,6 +121,11 @@ int main() {
          token_iter != token_list.end(); token_iter++) {
         cout << "[" << *token_iter << "] ";
     }
+    cout << endl << endl;
+
+    handler h;
+    cout << "-- CJK Tokenizer Handler" << endl;
+    tknzr.tokenize(text_str, h);
     cout << endl << endl;
     
     string cjk_str = "這是CJK字串";
