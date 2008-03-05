@@ -157,6 +157,16 @@ void tokenizer::tokenize(const string &str, vector<string> &token_list) {
     }
 }
 
+void tokenizer::tokenize(const std::string &str, tokenizer_handler &handler) {
+    vector<string> token_list;
+
+    this->tokenize(str, token_list);
+    for (vector<string>::iterator token_iter = token_list.begin();
+         token_iter != token_list.end(); ++token_iter) {
+        handler.handle_token(*token_iter, has_cjk(*token_iter));
+    }
+}
+
 void tokenizer::split(const string &str, vector<string> &token_list) {
     unicode_char_t uchar;
     char *str_ptr = (char*) str.c_str();

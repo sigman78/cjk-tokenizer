@@ -20,6 +20,10 @@ Lingua::CJK::Tokenizer - CJK Tokenizer
     $tknzr->ngram_size(5);
     $tknzr->max_token_count(100);
     $tokens_ref = $tknzr->tokenize("CJK Text");
+    $tokens_ref = $tknzr->segment("CJK Text");
+    $tokens_ref = $tknzr->split("CJK Text");
+    $flag = $tknzr->has_cjk("CJK Text");
+    $flag = $tknzr->has_cjk_only("CJK Text");
 
 =head1 COPYRIGHT
 
