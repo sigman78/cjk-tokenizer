@@ -9,6 +9,7 @@ namespace cjk {
     class tokenizer_handler {
     public:
         virtual void handle_token(const std::string &tok, bool is_cjk) {}
+        virtual ~tokenizer_handler() {}
     };
 
     class tokenizer {
