@@ -18,6 +18,7 @@ int main() {
     vector<string>::iterator token_iter;
     char text[] =
         "美女遊戲等你挑戰周蕙最新鈴搶先下載茄子醬耍可愛一流"
+        "华沙是波兰的首都，也是其最大的城市。"
         "납치 여중생 공포에 떠는데'…경찰 200m 거리 25분만에 출동"
         "寛永通宝の一。京都方広寺の大仏をこわして1668年（寛文8）から鋳造した銅銭。"
         "ㄅㄆㄇㄈㄉㄊㄋㄌㄧㄨㄩ"
@@ -31,7 +32,7 @@ int main() {
     cout << "Original string: " << text << endl;
     cout << "Tokenized result: ";
     for (token_iter = token_list.begin();
-         token_iter != token_list.end(); token_iter++) {
+         token_iter != token_list.end(); ++token_iter) {
         cout << "[" << *token_iter << "] ";
     }
     cout << endl << endl;
@@ -44,7 +45,7 @@ int main() {
     cout << "Original string: " << text << endl;
     cout << "Tokenized result: ";
     for (token_iter = token_list.begin();
-         token_iter != token_list.end(); token_iter++) {
+         token_iter != token_list.end(); ++token_iter) {
         cout << "[" << *token_iter << "] ";
     }
     cout << endl << endl;
@@ -57,7 +58,7 @@ int main() {
     cout << "Original string: " << text << endl;
     cout << "Tokenized result: ";
     for (token_iter = token_list.begin();
-         token_iter != token_list.end(); token_iter++) {
+         token_iter != token_list.end(); ++token_iter) {
         cout << "[" << *token_iter << "] ";
     }
     cout << endl << endl;
@@ -70,7 +71,7 @@ int main() {
     cout << "Original string: " << text << endl;
     cout << "Tokenized result: ";
     for (token_iter = token_list.begin();
-         token_iter != token_list.end(); token_iter++) {
+         token_iter != token_list.end(); ++token_iter) {
         cout << "[" << *token_iter << "] ";
     }
     cout << endl << endl;
@@ -83,7 +84,7 @@ int main() {
     cout << "Original string: " << text << endl;
     cout << "Tokenized result: ";
     for (token_iter = token_list.begin();
-         token_iter != token_list.end(); token_iter++) {
+         token_iter != token_list.end(); ++token_iter) {
         cout << "[" << *token_iter << "] ";
     }
     cout << endl << endl;
@@ -94,7 +95,7 @@ int main() {
     cout << "Original string: " << text << endl;
     cout << "Tokenized result: ";
     for (token_iter = token_list.begin();
-         token_iter != token_list.end(); token_iter++) {
+         token_iter != token_list.end(); ++token_iter) {
         cout << "[" << *token_iter << "] ";
     }
     cout << endl << endl;
@@ -118,13 +119,38 @@ int main() {
     tknzr.segment(text_str, token_list);
     cout << "Tokenized result: ";
     for (token_iter = token_list.begin();
-         token_iter != token_list.end(); token_iter++) {
+         token_iter != token_list.end(); ++token_iter) {
+        cout << "[" << *token_iter << "] ";
+    }
+    cout << endl << endl;
+
+    cout << "[Split] (zh_tw -> zh_cn)" << endl;
+    token_list.clear();
+    tknzr.han_conv_method = HAN_CONV_TRAD2SIMP;
+    tknzr.split(text_str, token_list);
+    cout << "Original string: " << text << endl;
+    cout << "Tokenized result: ";
+    for (token_iter = token_list.begin();
+         token_iter != token_list.end(); ++token_iter) {
+        cout << "[" << *token_iter << "] ";
+    }
+    cout << endl << endl;
+
+    cout << "[Split] (zh_cn -> zh_tw)" << endl;
+    token_list.clear();
+    tknzr.han_conv_method = HAN_CONV_SIMP2TRAD;
+    tknzr.split(text_str, token_list);
+    cout << "Original string: " << text << endl;
+    cout << "Tokenized result: ";
+    for (token_iter = token_list.begin();
+         token_iter != token_list.end(); ++token_iter) {
         cout << "[" << *token_iter << "] ";
     }
     cout << endl << endl;
 
     handler h;
     cout << "-- CJK Tokenizer Handler" << endl;
+    tknzr.han_conv_method = HAN_CONV_NONE;
     tknzr.tokenize(text_str, h);
     cout << endl << endl;
     

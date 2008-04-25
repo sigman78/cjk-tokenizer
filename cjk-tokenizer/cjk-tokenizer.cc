@@ -1,6 +1,7 @@
 #include <cassert>
 #include <unicode.h>
 #include "cjk-tokenizer.h"
+#include "cjk-hanconvert.h"
 
 // 2E80..2EFF; CJK Radicals Supplement
 // 3000..303F; CJK Symbols and Punctuation
@@ -63,8 +64,7 @@ static void _split_string(string str, const string &delim,
         }
         str = str.substr(cut_at+1);
     }
-    if(str.length() > 0)
-    {
+    if(str.length() > 0) {
         list.push_back(str);
     }
 }
@@ -108,19 +108,19 @@ void tokenizer::tokenize(const string &str, vector<string> &token_list) {
     vector<string> temp_token_list;
     vector<unicode_char_t> temp_uchar_list;
 
-    this->split(str, temp_token_list);
-    this->split(str, temp_uchar_list);
+    split(str, temp_token_list);
+    split(str, temp_uchar_list);
 
     for (unsigned int i = 0; i < temp_token_list.size();) {
-        if (this->max_token_count > 0
-            && token_list.size() >= this->max_token_count) {
+        if (max_token_count > 0
+            && token_list.size() >= max_token_count) {
             break;
         }
         token_str.clear();
         if (UTF8_IS_CJK(temp_uchar_list[i])) {
-            for (unsigned int j = i; j < i + this->ngram_size; j++) {
-                if (this->max_token_count > 0
-                    && token_list.size() >= this->max_token_count) {
+            for (unsigned int j = i; j < i + ngram_size; ++j) {
+                if (max_token_count > 0
+                    && token_list.size() >= max_token_count) {
                     break;
                 }
                 if (j == temp_token_list.size()) {
@@ -131,7 +131,7 @@ void tokenizer::tokenize(const string &str, vector<string> &token_list) {
                     token_list.push_back(token_str);
                 }
             }
-            i++;
+            ++i;
         }
         else {
             unsigned int j = i;
@@ -139,15 +139,15 @@ void tokenizer::tokenize(const string &str, vector<string> &token_list) {
                 unsigned char *p
                     = (unsigned char*) temp_token_list[j].c_str();
                 if (*p == ' ' || UTF8_IS_CJK(temp_uchar_list[j])) {
-                    j++;
+                    ++j;
                     break;
                 }
                 token_str += temp_token_list[j];
-                j++;
+                ++j;
             }
             i = j;
-            if (this->max_token_count > 0
-                && token_list.size() >= this->max_token_count) {
+            if (max_token_count > 0
+                && token_list.size() >= max_token_count) {
                 break;
             }
             if(token_str.length() > 0) {
@@ -160,7 +160,7 @@ void tokenizer::tokenize(const string &str, vector<string> &token_list) {
 void tokenizer::tokenize(const std::string &str, tokenizer_handler &handler) {
     vector<string> token_list;
 
-    this->tokenize(str, token_list);
+    tokenize(str, token_list);
     for (vector<string>::iterator token_iter = token_list.begin();
          token_iter != token_list.end(); ++token_iter) {
         handler.handle_token(*token_iter, has_cjk(*token_iter));
@@ -173,12 +173,24 @@ void tokenizer::split(const string &str, vector<string> &token_list) {
     int str_utf8_len = unicode_strlen(str_ptr, str.length());
     unsigned char p[sizeof(unicode_char_t) + 1];
 
-    for (int i = 0; i < str_utf8_len; i++) {
+    for (int i = 0; i < str_utf8_len; ++i) {
         str_ptr = unicode_get_utf8((const char*) str_ptr, &uchar);
         if (str_ptr == NULL) {
             break;
         }
-
+        switch (han_conv_method) {
+            case HAN_CONV_TRAD2SIMP : {
+                han_convert::trad2simp(uchar);
+                break;
+            }
+            case HAN_CONV_SIMP2TRAD : {
+                han_convert::simp2trad(uchar);
+                break;
+            }
+            default: {
+                break;
+            }
+        }
         token_list.push_back(string((const char*)_unicode_to_char(uchar, p)));
     }
 }
@@ -188,10 +200,23 @@ void tokenizer::split(const string &str, vector<unicode_char_t> &token_list) {
     char *str_ptr = (char*) str.c_str();
     int str_utf8_len = unicode_strlen(str_ptr, str.length());
 
-    for (int i = 0; i < str_utf8_len; i++) {
+    for (int i = 0; i < str_utf8_len; ++i) {
         str_ptr = unicode_get_utf8((const char*) str_ptr, &uchar);
         if (str_ptr == NULL) {
             break;
+        }
+        switch (han_conv_method) {
+            case HAN_CONV_TRAD2SIMP : {
+                han_convert::trad2simp(uchar);
+                break;
+            }
+            case HAN_CONV_SIMP2TRAD : {
+                han_convert::simp2trad(uchar);
+                break;
+            }
+            default: {
+                break;
+            }
         }
         token_list.push_back(uchar);
     }
@@ -211,9 +236,9 @@ void tokenizer::segment(string str, vector<string> &token_segment) {
 bool tokenizer::has_cjk(const std::string &str) {
     vector<unicode_char_t> temp_uchar_list;
 
-    this->split(str, temp_uchar_list);
+    split(str, temp_uchar_list);
     
-    for (unsigned int i = 0; i < temp_uchar_list.size(); i++) {
+    for (unsigned int i = 0; i < temp_uchar_list.size(); ++i) {
         if (UTF8_IS_CJK(temp_uchar_list[i])) {
             return true;
         }
@@ -224,9 +249,9 @@ bool tokenizer::has_cjk(const std::string &str) {
 bool tokenizer::has_cjk_only(const std::string &str) {
     vector<unicode_char_t> temp_uchar_list;
 
-    this->split(str, temp_uchar_list);
+    split(str, temp_uchar_list);
     
-    for (unsigned int i = 0; i < temp_uchar_list.size(); i++) {
+    for (unsigned int i = 0; i < temp_uchar_list.size(); ++i) {
         if (!(UTF8_IS_CJK(temp_uchar_list[i]))) {
             return false;
         }

@@ -4,13 +4,16 @@ MODULE = cjk-tokenizer
 
 all: build
 
-build: cjk-tokenizer.o libcjk-tokenizer.a
+build: cjk-hanconvert.o cjk-tokenizer.o libcjk-tokenizer.a
+
+cjk-hanconvert.o:
+	$(CPP) $(CPP_FLAGS) -c cjk-hanconvert.cc
 
 cjk-tokenizer.o:
 	$(CPP) $(CPP_FLAGS) -c cjk-tokenizer.cc
 
 libcjk-tokenizer.a: cjk-tokenizer.o
-	ar crv $@ cjk-tokenizer.o
+	ar crv $@ cjk-tokenizer.o cjk-hanconvert.o
 	ranlib $@
 
 test:

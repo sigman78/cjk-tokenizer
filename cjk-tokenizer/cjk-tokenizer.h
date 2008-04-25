@@ -12,13 +12,21 @@ namespace cjk {
         virtual ~tokenizer_handler() {}
     };
 
+    enum han_conv_enum {
+        HAN_CONV_NONE = 0,
+        HAN_CONV_TRAD2SIMP,
+        HAN_CONV_SIMP2TRAD
+    };
+    
     class tokenizer {
     private:
         static inline unsigned char* _unicode_to_char(unicode_char_t &uchar,
                                                       unsigned char *p);
     public:
+        han_conv_enum han_conv_method;
         unsigned int ngram_size;
         unsigned int max_token_count;
+
         tokenizer();
         ~tokenizer();
         void tokenize(const std::string &str,
