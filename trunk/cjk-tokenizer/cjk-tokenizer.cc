@@ -1,5 +1,6 @@
 #include <cassert>
 #include <unicode.h>
+#include <cstring>
 #include "cjk-tokenizer.h"
 #include "cjk-hanconvert.h"
 
@@ -87,18 +88,18 @@ unsigned char* tokenizer::_unicode_to_char(unicode_char_t &uchar,
     }
     else if (uchar < 0x800) {
         p[0] = (0xC0 | uchar >> 6);
-        p[1] = (0x80 | uchar & 0x3F);
+        p[1] = (0x80 | (uchar & 0x3F));
     }
     else if (uchar < 0x10000) {
         p[0] = (0xE0 | uchar >> 12);
-        p[1] = (0x80 | uchar >> 6 & 0x3F);
-        p[2] = (0x80 | uchar & 0x3F);
+        p[1] = (0x80 | (uchar >> 6 & 0x3F));
+        p[2] = (0x80 | (uchar & 0x3F));
     }
     else if (uchar < 0x200000) {
         p[0] = (0xF0 | uchar >> 18);
-        p[1] = (0x80 | uchar >> 12 & 0x3F);
-        p[2] = (0x80 | uchar >> 6 & 0x3F);
-        p[3] = (0x80 | uchar & 0x3F);
+        p[1] = (0x80 | (uchar >> 12 & 0x3F));
+        p[2] = (0x80 | (uchar >> 6 & 0x3F));
+        p[3] = (0x80 | (uchar & 0x3F));
     }
     return p;
 }

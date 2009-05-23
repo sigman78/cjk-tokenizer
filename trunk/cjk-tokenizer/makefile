@@ -1,5 +1,5 @@
 CPP = g++
-CPP_FLAGS = -Wall -O3
+CPP_FLAGS = -Wall -O3 -L/usr/local/lib
 MODULE = cjk-tokenizer
 
 all: build
@@ -17,7 +17,7 @@ libcjk-tokenizer.a: cjk-tokenizer.o
 	ranlib $@
 
 test:
-	$(CPP) $(CPP_FLAGS) -o $@ $@.cc -L. -lcjk-tokenizer -lunicode
+	$(CPP) $(CPP_FLAGS) -static -o $@ $@.cc -L. -lcjk-tokenizer -lunicode
 	./$@
 
 clean:
